@@ -21,7 +21,7 @@ namespace fleetops_backend.Presentation.Controllers
             var success = await _authService.RegisterAsync(dto.FullName, dto.Email, dto.Password);
 
             if (!success)
-                return BadRequest(new { message = "Full Name already exists" });
+                return BadRequest(new { message = "Email already exists" });
 
             return Ok(new { message = "User registered successfully" });
         }

@@ -44,7 +44,7 @@ namespace fleetops_backend.Application.Services
                 FullName = fullName,
                 Email = email,
                 PasswordHash = hashedPassword,
-                Role = "driver",
+                RoleId = 5,
                 CreatedAt = DateTime.UtcNow
             };
 
