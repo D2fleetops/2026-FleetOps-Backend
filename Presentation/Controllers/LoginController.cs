@@ -1,5 +1,6 @@
 using fleetops_backend.Application.DTOs;
 using fleetops_backend.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fleetops_backend.Presentation.Controllers

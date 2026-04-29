@@ -18,12 +18,19 @@ namespace fleetops_backend.Presentation.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDTO dto)
         {
-            var success = await _authService.RegisterAsync(dto.FullName, dto.Email, dto.Password);
+            try
+            {
+                var token = await _authService.RegisterAsync(dto.FullName, dto.Email, dto.Password);
 
-            if (!success)
-                return BadRequest(new { message = "Email already exists" });
+                if (token == null)
+                    return BadRequest(new { message = "Email already exists" });
 
-            return Ok(new { message = "User registered successfully" });
+                return Ok(new { message = "User registered successfully", token });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

@@ -32,15 +32,21 @@ namespace fleetops_backend.Application.Services
                 throw new InvalidOperationException("JWT ExpireMinutes is not a valid number.");
             }
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
+
+            if (user.Role != null)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, user.Role.Name));
+            }
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(claims),
+                Subject = new ClaimsIdentity(claims.ToArray()),
                 Expires = DateTime.UtcNow.AddMinutes(expireMinutes),
                 Issuer = jwt["Issuer"],
                 Audience = jwt["Audience"],
