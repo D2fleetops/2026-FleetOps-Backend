@@ -1,0 +1,24 @@
+@fleetops_backend_HostAddress = http://localhost:5107
+
+### Login
+POST {{fleetops_backend_HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "wkwk@gmail.com",
+  "password": "wkwkwkwk"
+}
+
+### Register
+POST {{fleetops_backend_HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Fit",
+  "email": "wkwk@gmail.com",
+  "password": "wkwkwkwk"
+}
+
+### Get Users
+GET {{fleetops_backend_HostAddress}}/api/auth/users
+Content-Type: application/json
