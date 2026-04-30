@@ -6,6 +6,7 @@ using fleetops_backend.Application.Services;
 using fleetops_backend.Infrastructure.Data;
 using System.Security.Claims;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 var jwt = builder.Configuration.GetSection("Jwt");
@@ -14,8 +15,9 @@ var key = Encoding.UTF8.GetBytes(keyString);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-        ));
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        x => x.UseNetTopologySuite()
+    ));
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();
