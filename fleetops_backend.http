@@ -1,4 +1,6 @@
 @fleetops_backend_HostAddress = http://localhost:5107
+@existingDriverId = 1
+@nonExistingVehicleId = 999999
 
 ### Login
 POST {{fleetops_backend_HostAddress}}/api/auth/login
@@ -22,3 +24,27 @@ Content-Type: application/json
 ### Get Users
 GET {{fleetops_backend_HostAddress}}/api/auth/users
 Content-Type: application/json
+
+### Start Trip
+POST {{fleetops_backend_HostAddress}}/api/trips/start
+Content-Type: application/json
+
+{
+  "driverId": {{existingDriverId}},
+  "vehicleId": 1,
+  "lokasiAwal": "Jakarta",
+  "startLatitude": -6.2088,
+  "startLongitude": 106.8456
+}
+
+### Start Trip - Vehicle Does Not Exist
+POST {{fleetops_backend_HostAddress}}/api/trips/start
+Content-Type: application/json
+
+{
+  "driverId": {{existingDriverId}},
+  "vehicleId": {{nonExistingVehicleId}},
+  "lokasiAwal": "Jakarta",
+  "startLatitude": -6.2088,
+  "startLongitude": 106.8456
+}
