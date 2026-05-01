@@ -33,6 +33,15 @@ namespace fleetops_backend.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Configure Point geometry properties for Trip
+            modelBuilder.Entity<Trip>()
+                .Property(t => t.KordAwal)
+                .HasColumnType("geography (Point, 4326)");
+
+            modelBuilder.Entity<Trip>()
+                .Property(t => t.KordAkhir)
+                .HasColumnType("geography (Point, 4326)");
+
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "Admin" },
                 new Role { Id = 2, Name = "FleetManager" },
