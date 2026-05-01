@@ -1,6 +1,8 @@
 @fleetops_backend_HostAddress = http://localhost:5107
 @existingDriverId = 1
 @nonExistingVehicleId = 999999
+@existingTripId = 1
+@nonExistingTripId = 999999
 
 ### Login
 POST {{fleetops_backend_HostAddress}}/api/auth/login
@@ -47,4 +49,28 @@ Content-Type: application/json
   "lokasiAwal": "Jakarta",
   "startLatitude": -6.2088,
   "startLongitude": 106.8456
+}
+
+### Stop Trip
+PATCH {{fleetops_backend_HostAddress}}/api/trips/{{existingTripId}}/stop
+Content-Type: application/json
+
+{
+  "driverId": {{existingDriverId}},
+  "vehicleId": 1,
+  "lokasiAkhir": "Bandung",
+  "endLatitude": -6.9147,
+  "endLongitude": 107.6098
+}
+
+### Stop Trip - Trip Not Found
+PATCH {{fleetops_backend_HostAddress}}/api/trips/{{nonExistingTripId}}/stop
+Content-Type: application/json
+
+{
+  "driverId": {{existingDriverId}},
+  "vehicleId": 1,
+  "lokasiAkhir": "Bandung",
+  "endLatitude": -6.9147,
+  "endLongitude": 107.6098
 }

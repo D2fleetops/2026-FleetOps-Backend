@@ -60,5 +60,48 @@ namespace fleetops_backend.Application.Services
 
             return trip;
         }
+
+        public async Task<Trip> StopTripAsync(int tripId, StopTripDTO dto)
+        {
+            var trip = await _context.Trips.FirstOrDefaultAsync(t => t.TripId == tripId);
+            if (trip == null)
+            {
+                throw new KeyNotFoundException("Trip not found.");
+            }
+
+            if (trip.DriverId != dto.DriverId)
+            {
+                throw new InvalidOperationException("Driver does not match the trip.");
+            }
+
+            if (trip.VehicleId != dto.VehicleId)
+            {
+                throw new InvalidOperationException("Vehicle does not match the trip.");
+            }
+
+            if (trip.WaktuSelesai.HasValue)
+            {
+                throw new InvalidOperationException("Trip already finished.");
+            }
+
+            Point? endPoint = null;
+            if (dto.EndLatitude.HasValue && dto.EndLongitude.HasValue)
+            {
+                endPoint = new Point(dto.EndLongitude.Value, dto.EndLatitude.Value)
+                {
+                    SRID = 4326
+                };
+            }
+
+            trip.KordAkhir = endPoint;
+            trip.LokasiAkhir = dto.LokasiAkhir;
+            trip.WaktuSelesai = DateTimeOffset.UtcNow;
+            trip.Status = "Finished";
+
+            _context.Trips.Update(trip);
+            await _context.SaveChangesAsync();
+
+            return trip;
+        }
     }
 }
