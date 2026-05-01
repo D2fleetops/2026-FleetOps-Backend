@@ -315,6 +315,12 @@ namespace fleetops_backend.Migrations
                         .HasColumnType("geography (Point, 4326)")
                         .HasColumnName("kord_awal");
 
+                    b.Property<string>("LokasiAkhir")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LokasiAwal")
+                        .HasColumnType("text");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");

@@ -20,6 +20,8 @@ namespace fleetops_backend.Models
 
         [Column("kord_akhir", TypeName = "geography")]
         public Point? KordAkhir { get; set; }
+        public string? LokasiAwal {get; set;}
+        public string? LokasiAkhir {get; set;}
 
         [Column("waktu_mulai")]
         public DateTimeOffset WaktuMulai { get; set; }

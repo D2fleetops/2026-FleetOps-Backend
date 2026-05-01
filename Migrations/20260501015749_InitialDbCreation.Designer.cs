@@ -13,8 +13,8 @@ using fleetops_backend.Infrastructure.Data;
 namespace fleetops_backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260430024300_InitialDBCreation")]
-    partial class InitialDBCreation
+    [Migration("20260501015749_InitialDbCreation")]
+    partial class InitialDbCreation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -317,6 +317,12 @@ namespace fleetops_backend.Migrations
                     b.Property<Point>("KordAwal")
                         .HasColumnType("geography (Point, 4326)")
                         .HasColumnName("kord_awal");
+
+                    b.Property<string>("LokasiAkhir")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LokasiAwal")
+                        .HasColumnType("text");
 
                     b.Property<string>("Status")
                         .IsRequired()
