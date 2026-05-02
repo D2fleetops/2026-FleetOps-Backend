@@ -15,8 +15,8 @@ namespace fleetops_backend.Infrastructure.Data.Seeds
                     VehicleId = 1,
                     LokasiAwal = "Jakarta",
                     LokasiAkhir = "Bandung",
-                    WaktuMulai = DateTimeOffset.UtcNow.AddHours(-2),
-                    WaktuSelesai = DateTimeOffset.UtcNow,
+                    WaktuMulai = new DateTimeOffset(new DateTime(2026, 5, 2, 9, 59, 13, 650), new TimeSpan(0, 0, 0, 0, 0)),
+                    WaktuSelesai = new DateTimeOffset(new DateTime(2026, 5, 2, 11, 59, 13, 650), new TimeSpan(0, 0, 0, 0, 0)),
                     Status = "Completed"
                 }
             );

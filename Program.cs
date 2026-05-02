@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using fleetops_backend.Application.Services;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+using EFCore.NamingConventions;
 using fleetops_backend.Infrastructure.Data;
 using System.Security.Claims;
 
@@ -14,10 +16,12 @@ var keyString = jwt["Key"] ?? throw new InvalidOperationException("JWT Key is no
 var key = Encoding.UTF8.GetBytes(keyString);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        x => x.UseNetTopologySuite()
-    ));
+    options
+        .UseSnakeCaseNamingConvention()
+        .UseNpgsql(
+            builder.Configuration.GetConnectionString("DefaultConnection"),
+            x => x.UseNetTopologySuite()
+        ));
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();

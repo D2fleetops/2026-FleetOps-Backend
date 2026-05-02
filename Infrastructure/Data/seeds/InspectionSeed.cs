@@ -15,7 +15,7 @@ namespace fleetops_backend.Infrastructure.Data.Seeds
                     VehicleId = 1,
                     TripId = 1,
                     Status = true,
-                    CreatedAt = DateTimeOffset.UtcNow
+                    CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 2, 11, 59, 13, 652), new TimeSpan(0, 0, 0, 0, 0))
                 }
             );
         }
