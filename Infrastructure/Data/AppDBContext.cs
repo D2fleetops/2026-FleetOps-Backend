@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using fleetops_backend.Models;
+using fleetops_backend.Infrastructure.Data.Seeds;
 
 namespace fleetops_backend.Infrastructure.Data
 {
@@ -157,6 +158,24 @@ namespace fleetops_backend.Infrastructure.Data
         .OnDelete(DeleteBehavior.SetNull);
 
     // -- Add indexes or column types here if needed (e.g. geography Point setup) --
+
+    // Seed data
+    SeedTestData(modelBuilder);
+        }
+        private void SeedTestData(ModelBuilder modelBuilder)
+        {
+            modelBuilder.SeedRoles();
+            modelBuilder.SeedDrivers();
+            modelBuilder.SeedVehicles();
+            modelBuilder.SeedTrips();
+            modelBuilder.SeedFuels();
+            modelBuilder.SeedMaintenances();
+            modelBuilder.SeedInspectionItems();
+            modelBuilder.SeedTripDetails();
+            modelBuilder.SeedInspections();
+            modelBuilder.SeedInspectionPhotos();
+            modelBuilder.SeedInspectionResults();
         }
     }
 }
+
