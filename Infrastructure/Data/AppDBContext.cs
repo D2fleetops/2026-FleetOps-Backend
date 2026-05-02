@@ -43,14 +43,7 @@ namespace fleetops_backend.Infrastructure.Data
                 .Property(t => t.KordAkhir)
                 .HasColumnType("geography (Point, 4326)");
 
-            modelBuilder.Entity<Role>().HasData(
-                new Role { Id = 1, Name = "Admin" },
-                new Role { Id = 2, Name = "FleetManager" },
-                new Role { Id = 3, Name = "Driver" },
-                new Role { Id = 4, Name = "Employee" },
-                new Role { Id = 5, Name = "Unassigned" }
-            );
-                // Roles -> Users (1 Role -> many Users)
+                
     // Add ICollection<Users> Users in Roles if you want two-way nav
     modelBuilder.Entity<Role>()
         .HasMany(r => r.Users)

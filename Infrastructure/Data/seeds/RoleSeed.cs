@@ -3,7 +3,7 @@ using fleetops_backend.Models;
 
 namespace fleetops_backend.Infrastructure.Data.Seeds
 {
-    public static class RoleSeed
+    public static class RoleSeed // Roles -> Users (1 Role -> many Users)
     {
         public static void SeedRoles(this ModelBuilder modelBuilder)
         {
