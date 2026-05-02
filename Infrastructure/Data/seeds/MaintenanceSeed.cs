@@ -12,11 +12,11 @@ namespace fleetops_backend.Infrastructure.Data.Seeds
                 {
                     Id = 1,
                     VehicleId = 1,
-                    Tanggal = DateTime.UtcNow,
+                    Tanggal = new DateTime(2026, 5, 2, 11, 59, 13, 651, DateTimeKind.Utc),
                     Catatan = "Rutin maintenance check",
                     Odometer = 5000,
                     Biaya = 500000,
-                    CreatedAt = DateTimeOffset.UtcNow
+                    CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 2, 11, 59, 13, 651), new TimeSpan(0, 0, 0, 0, 0))
                 }
             );
         }

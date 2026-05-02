@@ -13,7 +13,7 @@ using fleetops_backend.Infrastructure.Data;
 namespace fleetops_backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260502112234_InitialCreate")]
+    [Migration("20260502131433_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -31,91 +31,133 @@ namespace fleetops_backend.Migrations
                 {
                     b.Property<int>("DriverId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("driver_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("DriverId"));
 
                     b.Property<string>("JenisLisensi")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("jenis_lisensi");
 
                     b.Property<string>("Status")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("status");
 
                     b.Property<DateTimeOffset>("TanggalBerlaku")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("tanggal_berlaku");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer")
                         .HasColumnName("user_id");
 
-                    b.HasKey("DriverId");
+                    b.HasKey("DriverId")
+                        .HasName("pk_drivers");
 
                     b.HasIndex("UserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_drivers_user_id");
 
-                    b.ToTable("Drivers");
+                    b.ToTable("drivers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            DriverId = 1,
+                            JenisLisensi = "B",
+                            Status = "Active",
+                            TanggalBerlaku = new DateTimeOffset(new DateTime(2031, 5, 2, 11, 59, 13, 649, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("fleetops_backend.Models.Fuel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
 
                     b.Property<int?>("DriverId")
                         .HasColumnType("integer")
                         .HasColumnName("driver_id");
 
                     b.Property<int>("HargaLiter")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("harga_liter");
 
                     b.Property<int>("HargaTotal")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("harga_total");
 
                     b.Property<string>("ImageUrlPath")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("image_url_path");
 
                     b.Property<int>("JmlLiter")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("jml_liter");
 
                     b.Property<string>("LokasiPengisian")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("lokasi_pengisian");
 
                     b.Property<int>("VehicleId")
                         .HasColumnType("integer")
                         .HasColumnName("vehicle_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_fuels");
 
-                    b.HasIndex("DriverId");
+                    b.HasIndex("DriverId")
+                        .HasDatabaseName("ix_fuels_driver_id");
 
-                    b.HasIndex("VehicleId");
+                    b.HasIndex("VehicleId")
+                        .HasDatabaseName("ix_fuels_vehicle_id");
 
-                    b.ToTable("Fuels");
+                    b.ToTable("fuels", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 5, 2, 11, 59, 13, 651, DateTimeKind.Utc),
+                            DriverId = 1,
+                            HargaLiter = 15000,
+                            HargaTotal = 750000,
+                            JmlLiter = 50,
+                            LokasiPengisian = "Jakarta Pusat",
+                            VehicleId = 1
+                        });
                 });
 
             modelBuilder.Entity("fleetops_backend.Models.Inspection", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
 
                     b.Property<int>("DriverId")
                         .HasColumnType("integer")
                         .HasColumnName("driver_id");
 
                     b.Property<bool>("Status")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("status");
 
                     b.Property<int>("TripId")
                         .HasColumnType("integer")
@@ -125,73 +167,134 @@ namespace fleetops_backend.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("vehicle_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_inspections");
 
-                    b.HasIndex("DriverId");
+                    b.HasIndex("DriverId")
+                        .HasDatabaseName("ix_inspections_driver_id");
 
-                    b.HasIndex("TripId");
+                    b.HasIndex("TripId")
+                        .HasDatabaseName("ix_inspections_trip_id");
 
-                    b.HasIndex("VehicleId");
+                    b.HasIndex("VehicleId")
+                        .HasDatabaseName("ix_inspections_vehicle_id");
 
-                    b.ToTable("Inspections");
+                    b.ToTable("inspections", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 2, 11, 59, 13, 652, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            DriverId = 1,
+                            Status = true,
+                            TripId = 1,
+                            VehicleId = 1
+                        });
                 });
 
             modelBuilder.Entity("fleetops_backend.Models.InspectionItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("IsRequired")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_required");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_inspection_items");
 
-                    b.ToTable("InspectionItems");
+                    b.ToTable("inspection_items", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsRequired = true,
+                            Name = "Brake Condition"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsRequired = true,
+                            Name = "Tire Condition"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsRequired = true,
+                            Name = "Lights"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsRequired = false,
+                            Name = "Mirrors"
+                        });
                 });
 
             modelBuilder.Entity("fleetops_backend.Models.InspectionPhoto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ImageUrlPath")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("image_url_path");
 
                     b.Property<int>("InspectionId")
                         .HasColumnType("integer")
                         .HasColumnName("inspection_id");
 
                     b.Property<bool>("IsRequired")
-                        .HasColumnType("boolean");
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_required");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_inspection_photos");
 
-                    b.HasIndex("InspectionId");
+                    b.HasIndex("InspectionId")
+                        .HasDatabaseName("ix_inspection_photos_inspection_id");
 
-                    b.ToTable("InspectionPhotos");
+                    b.ToTable("inspection_photos", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ImageUrlPath = "https://example.com/photo1.jpg",
+                            InspectionId = 1,
+                            IsRequired = true
+                        });
                 });
 
             modelBuilder.Entity("fleetops_backend.Models.InspectionResult", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Condition")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("condition");
 
                     b.Property<int>("InspectionId")
                         .HasColumnType("integer")
@@ -202,73 +305,120 @@ namespace fleetops_backend.Migrations
                         .HasColumnName("item_id");
 
                     b.Property<string>("Note")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("note");
 
                     b.Property<int?>("PhotoId")
                         .HasColumnType("integer")
                         .HasColumnName("photo_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_inspection_results");
 
-                    b.HasIndex("InspectionId");
+                    b.HasIndex("InspectionId")
+                        .HasDatabaseName("ix_inspection_results_inspection_id");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("ItemId")
+                        .HasDatabaseName("ix_inspection_results_item_id");
 
-                    b.HasIndex("PhotoId");
+                    b.HasIndex("PhotoId")
+                        .HasDatabaseName("ix_inspection_results_photo_id");
 
-                    b.ToTable("InspectionResults");
+                    b.ToTable("inspection_results", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Condition = 1,
+                            InspectionId = 1,
+                            ItemId = 1,
+                            Note = "Brake pads good condition",
+                            PhotoId = 1
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Condition = 1,
+                            InspectionId = 1,
+                            ItemId = 2,
+                            Note = "Tires properly inflated"
+                        });
                 });
 
             modelBuilder.Entity("fleetops_backend.Models.Maintenance", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<decimal?>("Biaya")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric")
+                        .HasColumnName("biaya");
 
                     b.Property<string>("Catatan")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("catatan");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
 
                     b.Property<int?>("Odometer")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("odometer");
 
                     b.Property<DateTime>("Tanggal")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("tanggal");
 
                     b.Property<int>("VehicleId")
                         .HasColumnType("integer")
                         .HasColumnName("vehicle_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_maintenances");
 
-                    b.HasIndex("VehicleId");
+                    b.HasIndex("VehicleId")
+                        .HasDatabaseName("ix_maintenances_vehicle_id");
 
-                    b.ToTable("Maintenances");
+                    b.ToTable("maintenances", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Biaya = 500000m,
+                            Catatan = "Rutin maintenance check",
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 2, 11, 59, 13, 651, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Odometer = 5000,
+                            Tanggal = new DateTime(2026, 5, 2, 11, 59, 13, 651, DateTimeKind.Utc),
+                            VehicleId = 1
+                        });
                 });
 
             modelBuilder.Entity("fleetops_backend.Models.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_roles");
 
-                    b.ToTable("Roles");
+                    b.ToTable("roles", (string)null);
 
                     b.HasData(
                         new
@@ -302,7 +452,8 @@ namespace fleetops_backend.Migrations
                 {
                     b.Property<int>("TripId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("trip_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("TripId"));
 
@@ -319,14 +470,17 @@ namespace fleetops_backend.Migrations
                         .HasColumnName("kord_awal");
 
                     b.Property<string>("LokasiAkhir")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("lokasi_akhir");
 
                     b.Property<string>("LokasiAwal")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("lokasi_awal");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("status");
 
                     b.Property<int>("VehicleId")
                         .HasColumnType("integer")
@@ -340,85 +494,137 @@ namespace fleetops_backend.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("waktu_selesai");
 
-                    b.HasKey("TripId");
+                    b.HasKey("TripId")
+                        .HasName("pk_trips");
 
-                    b.HasIndex("DriverId");
+                    b.HasIndex("DriverId")
+                        .HasDatabaseName("ix_trips_driver_id");
 
-                    b.HasIndex("VehicleId");
+                    b.HasIndex("VehicleId")
+                        .HasDatabaseName("ix_trips_vehicle_id");
 
-                    b.ToTable("Trips");
+                    b.ToTable("trips", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            TripId = 1,
+                            DriverId = 1,
+                            LokasiAkhir = "Bandung",
+                            LokasiAwal = "Jakarta",
+                            Status = "Completed",
+                            VehicleId = 1,
+                            WaktuMulai = new DateTimeOffset(new DateTime(2026, 5, 2, 9, 59, 13, 650, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            WaktuSelesai = new DateTimeOffset(new DateTime(2026, 5, 2, 11, 59, 13, 650, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0))
+                        });
                 });
 
             modelBuilder.Entity("fleetops_backend.Models.TripDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AvgSpeed")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("avg_speed");
 
                     b.Property<string>("ImageUrlPath")
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("image_url_path");
 
                     b.Property<int>("Jarak")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("jarak");
 
                     b.Property<int>("TripId")
                         .HasColumnType("integer")
                         .HasColumnName("trip_id");
 
                     b.Property<int>("Waktu")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("waktu");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_trip_details");
 
-                    b.HasIndex("TripId");
+                    b.HasIndex("TripId")
+                        .HasDatabaseName("ix_trip_details_trip_id");
 
-                    b.ToTable("TripDetails");
+                    b.ToTable("trip_details", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            AvgSpeed = 75,
+                            Jarak = 150,
+                            TripId = 1,
+                            Waktu = 120
+                        });
                 });
 
             modelBuilder.Entity("fleetops_backend.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("email");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("full_name");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("password_hash");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("integer")
                         .HasColumnName("role_id");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_users");
 
-                    b.HasIndex("RoleId");
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_users_role_id");
 
-                    b.ToTable("Users");
+                    b.ToTable("users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 5, 2, 11, 59, 13, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Email = "driver@fleetops.local",
+                            FullName = "FleetOps Test Driver",
+                            PasswordHash = "$2a$11$wvBoSd9TRmWoarbcfmSrwu.AeqYvmWSP1o.fdUrj88yS33TSJL2Dm",
+                            RoleId = 3
+                        });
                 });
 
             modelBuilder.Entity("fleetops_backend.Models.Vehicle", b =>
                 {
                     b.Property<int>("VehicleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("vehicle_id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("VehicleId"));
 
@@ -427,35 +633,58 @@ namespace fleetops_backend.Migrations
                         .HasColumnName("driver_id");
 
                     b.Property<int>("MaintenanceIntervalDay")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("maintenance_interval_day");
 
                     b.Property<int>("MaintenanceIntervalKm")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("maintenance_interval_km");
 
                     b.Property<int>("Odometer")
-                        .HasColumnType("integer");
+                        .HasColumnType("integer")
+                        .HasColumnName("odometer");
 
                     b.Property<string>("PLatNomor")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("p_lat_nomor");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("status");
 
                     b.Property<string>("Tipe")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("tipe");
 
                     b.Property<string>("VehicleName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("text")
+                        .HasColumnName("vehicle_name");
 
-                    b.HasKey("VehicleId");
+                    b.HasKey("VehicleId")
+                        .HasName("pk_vehicles");
 
-                    b.HasIndex("DriverId");
+                    b.HasIndex("DriverId")
+                        .HasDatabaseName("ix_vehicles_driver_id");
 
-                    b.ToTable("Vehicles");
+                    b.ToTable("vehicles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            VehicleId = 1,
+                            DriverId = 1,
+                            MaintenanceIntervalDay = 90,
+                            MaintenanceIntervalKm = 5000,
+                            Odometer = 0,
+                            PLatNomor = "B 1234 ABC",
+                            Status = "Active",
+                            Tipe = "Truck",
+                            VehicleName = "Truck-001"
+                        });
                 });
 
             modelBuilder.Entity("fleetops_backend.Models.Driver", b =>
@@ -464,7 +693,8 @@ namespace fleetops_backend.Migrations
                         .WithOne()
                         .HasForeignKey("fleetops_backend.Models.Driver", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_drivers_users_user_id");
 
                     b.Navigation("User");
                 });
@@ -474,13 +704,15 @@ namespace fleetops_backend.Migrations
                     b.HasOne("fleetops_backend.Models.Driver", "Driver")
                         .WithMany("Fuel")
                         .HasForeignKey("DriverId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_fuels_drivers_driver_id");
 
                     b.HasOne("fleetops_backend.Models.Vehicle", "Vehicle")
                         .WithMany("Fuel")
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_fuels_vehicles_vehicle_id");
 
                     b.Navigation("Driver");
 
@@ -493,19 +725,22 @@ namespace fleetops_backend.Migrations
                         .WithMany("Inspection")
                         .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_inspections_drivers_driver_id");
 
                     b.HasOne("fleetops_backend.Models.Trip", "Trip")
                         .WithMany()
                         .HasForeignKey("TripId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_inspections_trips_trip_id");
 
                     b.HasOne("fleetops_backend.Models.Vehicle", "Vehicle")
                         .WithMany("Inspection")
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_inspections_vehicles_vehicle_id");
 
                     b.Navigation("Driver");
 
@@ -520,7 +755,8 @@ namespace fleetops_backend.Migrations
                         .WithMany("Photos")
                         .HasForeignKey("InspectionId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_inspection_photos_inspections_inspection_id");
 
                     b.Navigation("Inspection");
                 });
@@ -531,18 +767,21 @@ namespace fleetops_backend.Migrations
                         .WithMany("Results")
                         .HasForeignKey("InspectionId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_inspection_results_inspections_inspection_id");
 
                     b.HasOne("fleetops_backend.Models.InspectionItem", "Item")
                         .WithMany("Result")
                         .HasForeignKey("ItemId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_inspection_results_inspection_items_item_id");
 
                     b.HasOne("fleetops_backend.Models.InspectionPhoto", "Photo")
                         .WithMany("Result")
                         .HasForeignKey("PhotoId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_inspection_results_inspection_photos_photo_id");
 
                     b.Navigation("Inspection");
 
@@ -557,7 +796,8 @@ namespace fleetops_backend.Migrations
                         .WithMany("Maintenance")
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_maintenances_vehicles_vehicle_id");
 
                     b.Navigation("Vehicle");
                 });
@@ -568,13 +808,15 @@ namespace fleetops_backend.Migrations
                         .WithMany("Trip")
                         .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_trips_drivers_driver_id");
 
                     b.HasOne("fleetops_backend.Models.Vehicle", "Vehicle")
                         .WithMany("Trip")
                         .HasForeignKey("VehicleId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_trips_vehicles_vehicle_id");
 
                     b.Navigation("Driver");
 
@@ -587,7 +829,8 @@ namespace fleetops_backend.Migrations
                         .WithMany("Detail")
                         .HasForeignKey("TripId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_trip_details_trips_trip_id");
 
                     b.Navigation("Trip");
                 });
@@ -598,7 +841,8 @@ namespace fleetops_backend.Migrations
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_users_roles_role_id");
 
                     b.Navigation("Role");
                 });
@@ -609,7 +853,8 @@ namespace fleetops_backend.Migrations
                         .WithMany("Vehicle")
                         .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_vehicles_drivers_driver_id");
 
                     b.Navigation("Driver");
                 });

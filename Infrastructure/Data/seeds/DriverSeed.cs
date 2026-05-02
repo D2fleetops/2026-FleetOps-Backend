@@ -13,7 +13,7 @@ namespace fleetops_backend.Infrastructure.Data.Seeds
                     DriverId = 1,
                     UserId = 1,
                     JenisLisensi = "B",
-                    TanggalBerlaku = DateTimeOffset.UtcNow.AddYears(5),
+                    TanggalBerlaku = new DateTimeOffset(new DateTime(2031, 5, 2, 11, 59, 13, 649), new TimeSpan(0, 0, 0, 0, 0)),
                     Status = "Active"
                 }
             );

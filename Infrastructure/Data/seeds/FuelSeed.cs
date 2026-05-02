@@ -17,7 +17,7 @@ namespace fleetops_backend.Infrastructure.Data.Seeds
                     HargaLiter = 15000,
                     HargaTotal = 750000,
                     LokasiPengisian = "Jakarta Pusat",
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = new DateTime(2026, 5, 2, 11, 59, 13, 651, DateTimeKind.Utc)
                 }
             );
         }
