@@ -13,8 +13,8 @@ using fleetops_backend.Infrastructure.Data;
 namespace fleetops_backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260501015749_InitialDbCreation")]
-    partial class InitialDbCreation
+    [Migration("20260502112234_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
