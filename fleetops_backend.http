@@ -2,7 +2,7 @@
 @existingDriverId = 1
 @existingVehicleId = 1
 @nonExistingVehicleId = 999999
-@existingTripId = 1
+@existingTripId = 5
 @nonExistingTripId = 999999
 
 ### Login
@@ -36,6 +36,21 @@ Content-Type: application/json
   "driverId": {{existingDriverId}},
   "vehicleId": {{existingVehicleId}},
   "lokasiAwal": "Jakarta",
+  "lokasiAkhir": "Bandung",
+  "kordAwalLatitude": -6.2088,
+  "kordAwalLongitude": 106.8456,
+  "odometerAwal": 1000.5
+}
+
+### Start Trip - No Inspection Completed
+POST {{fleetops_backend_HostAddress}}/api/trips/start
+Content-Type: application/json
+
+{
+  "driverId": 2,
+  "vehicleId": {{existingVehicleId}},
+  "lokasiAwal": "Jakarta",
+  "lokasiAkhir": "Bandung",
   "kordAwalLatitude": -6.2088,
   "kordAwalLongitude": 106.8456,
   "odometerAwal": 1000.5
@@ -49,6 +64,7 @@ Content-Type: application/json
   "driverId": {{existingDriverId}},
   "vehicleId": {{nonExistingVehicleId}},
   "lokasiAwal": "Jakarta",
+  "lokasiAkhir": "Bandung",
   "kordAwalLatitude": -6.2088,
   "kordAwalLongitude": 106.8456,
   "odometerAwal": 1000.5
@@ -62,6 +78,7 @@ Content-Type: application/json
   "driverId": {{existingDriverId}},
   "vehicleId": {{existingVehicleId}},
   "lokasiAwal": "Jakarta",
+  "lokasiAkhir": "Bandung",
   "kordAwalLatitude": -6.2088,
   "kordAwalLongitude": 106.8456,
   "odometerAwal": 1100.5

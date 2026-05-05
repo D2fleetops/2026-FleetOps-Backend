@@ -38,6 +38,8 @@ namespace fleetops_backend.Models
         [Column("waktu_selesai")]
         public DateTimeOffset? WaktuSelesai { get; set; }
 
+        public string? Catatan { get; set; }
+
         public string Status { get; set; } = string.Empty;
 
         public ICollection<TripDetail> Detail { get; set; } = new List<TripDetail>();

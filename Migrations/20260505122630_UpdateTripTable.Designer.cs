@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -12,9 +13,11 @@ using fleetops_backend.Infrastructure.Data;
 namespace fleetops_backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260505122630_UpdateTripTable")]
+    partial class UpdateTripTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -522,13 +525,9 @@ namespace fleetops_backend.Migrations
                         new
                         {
                             TripId = 1,
-                            Catatan = "Trip completed successfully",
                             DriverId = 1,
-                            JarakTempuh = 150.0,
                             LokasiAkhir = "Bandung",
                             LokasiAwal = "Jakarta",
-                            OdometerAkhir = 1150.5,
-                            OdometerAwal = 1000.5,
                             Status = "Completed",
                             VehicleId = 1,
                             WaktuMulai = new DateTimeOffset(new DateTime(2026, 5, 2, 9, 59, 13, 650, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
@@ -548,6 +547,10 @@ namespace fleetops_backend.Migrations
                     b.Property<int>("AvgSpeed")
                         .HasColumnType("integer")
                         .HasColumnName("avg_speed");
+
+                    b.Property<string>("Catatan")
+                        .HasColumnType("text")
+                        .HasColumnName("catatan");
 
                     b.Property<string>("DriverImageUrlPath")
                         .HasColumnType("text")
@@ -582,11 +585,9 @@ namespace fleetops_backend.Migrations
                         {
                             Id = 1,
                             AvgSpeed = 75,
-                            DriverImageUrlPath = "https://example.com/driver-image.jpg",
-                            ItemImageUrlPath = "https://example.com/item-image.jpg",
                             Jarak = 150,
                             TripId = 1,
-                            Waktu = 7200
+                            Waktu = 120
                         });
                 });
 

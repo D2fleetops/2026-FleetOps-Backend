@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json;
 using fleetops_backend.Application.Services;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using EFCore.NamingConventions;

@@ -32,6 +32,17 @@ namespace fleetops_backend.Application.Services
                 throw new InvalidOperationException("Driver already has an active trip.");
             }
 
+            // Check if driver has completed inspection for today
+            var today = DateTimeOffset.UtcNow.Date;
+            var todayInspection = await _context.Set<Inspection>()
+                .FirstOrDefaultAsync(i => i.DriverId == dto.DriverId && 
+                                          i.CreatedAt.Date == today &&
+                                          i.Status == true);
+            if (todayInspection == null)
+            {
+                throw new InvalidOperationException("Driver must complete an inspection before starting a trip.");
+            }
+
             var vehicle = await _context.Vehicles
                 .FirstOrDefaultAsync(v => v.VehicleId == dto.VehicleId);
 
@@ -59,6 +70,7 @@ namespace fleetops_backend.Application.Services
                 DriverId = dto.DriverId,
                 VehicleId = dto.VehicleId,
                 LokasiAwal = dto.LokasiAwal,
+                LokasiAkhir = dto.LokasiAkhir,
                 KordAwal = startPoint,
                 OdometerAwal = dto.OdometerAwal,
                 WaktuMulai = DateTimeOffset.UtcNow,

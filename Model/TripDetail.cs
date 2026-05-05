@@ -13,6 +13,7 @@ namespace fleetops_backend.Models
         public int Jarak { get; set; }          // meters or chosen unit
         public int AvgSpeed { get; set; }       // km/h or chosen unit
         public int Waktu { get; set; }          // seconds or chosen unit
-        public string? ImageUrlPath { get; set; }
+        public string? ItemImageUrlPath { get; set; }
+        public string? DriverImageUrlPath { get; set; }
     }
 }

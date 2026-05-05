@@ -70,7 +70,7 @@ namespace fleetops_backend.Presentation.Controllers
                     trip.OdometerAkhir,
                     jarak = tripDetail?.Jarak,
                     avgSpeed = tripDetail?.AvgSpeed,
-                    waktu = tripDetail?.Waktu,
+                    waktuJam = tripDetail?.Waktu > 0 ? (double)tripDetail.Waktu / 3600.0 : 0,
                     trip.WaktuSelesai,
                     trip.Status
                 });
