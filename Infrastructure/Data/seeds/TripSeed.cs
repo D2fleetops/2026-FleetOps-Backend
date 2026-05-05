@@ -15,9 +15,13 @@ namespace fleetops_backend.Infrastructure.Data.Seeds
                     VehicleId = 1,
                     LokasiAwal = "Jakarta",
                     LokasiAkhir = "Bandung",
+                    OdometerAwal = 1000.5,
+                    OdometerAkhir = 1150.5,
+                    JarakTempuh = 150,
                     WaktuMulai = new DateTimeOffset(new DateTime(2026, 5, 2, 9, 59, 13, 650), new TimeSpan(0, 0, 0, 0, 0)),
                     WaktuSelesai = new DateTimeOffset(new DateTime(2026, 5, 2, 11, 59, 13, 650), new TimeSpan(0, 0, 0, 0, 0)),
-                    Status = "Completed"
+                    Status = "Completed",
+                    Catatan = "Trip completed successfully"
                 }
             );
         }

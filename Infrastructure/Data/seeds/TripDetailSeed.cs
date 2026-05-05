@@ -14,7 +14,9 @@ namespace fleetops_backend.Infrastructure.Data.Seeds
                     TripId = 1,
                     Jarak = 150,
                     AvgSpeed = 75,
-                    Waktu = 120
+                    Waktu = 7200,
+                    ItemImageUrlPath = "https://example.com/item-image.jpg",
+                    DriverImageUrlPath = "https://example.com/driver-image.jpg"
                 }
             );
         }

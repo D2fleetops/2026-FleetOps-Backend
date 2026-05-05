@@ -1,5 +1,7 @@
 using fleetops_backend.Application.DTOs;
 using fleetops_backend.Application.Services;
+using fleetops_backend.Infrastructure.Data;
+using fleetops_backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +12,12 @@ namespace fleetops_backend.Presentation.Controllers
     public class TripsController : ControllerBase
     {
         private readonly TripService _tripService;
+        private readonly AppDbContext _context;
 
-        public TripsController(TripService tripService)
+        public TripsController(TripService tripService, AppDbContext context)
         {
             _tripService = tripService;
+            _context = context;
         }
 
         [HttpPost("start")]
@@ -35,6 +39,8 @@ namespace fleetops_backend.Presentation.Controllers
                     trip.DriverId,
                     trip.VehicleId,
                     trip.LokasiAwal,
+                    trip.LokasiAkhir,
+                    trip.OdometerAwal,
                     trip.WaktuMulai,
                     trip.Status
                 });
@@ -52,12 +58,20 @@ namespace fleetops_backend.Presentation.Controllers
             {
                 var trip = await _tripService.StopTripAsync(id, dto);
 
+                // Fetch TripDetail to get calculated metrics
+                var tripDetail = await _context.Set<TripDetail>()
+                    .FirstOrDefaultAsync(td => td.TripId == id);
+
                 return Ok(new
                 {
                     message = "Trip stopped successfully",
                     trip.TripId,
-                    trip.WaktuSelesai,
                     trip.LokasiAkhir,
+                    trip.OdometerAkhir,
+                    jarak = tripDetail?.Jarak,
+                    avgSpeed = tripDetail?.AvgSpeed,
+                    waktuJam = tripDetail?.Waktu > 0 ? (double)tripDetail.Waktu / 3600.0 : 0,
+                    trip.WaktuSelesai,
                     trip.Status
                 });
             }
