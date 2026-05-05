@@ -23,6 +23,15 @@ namespace fleetops_backend.Application.Services
                 return null;
             }
 
+            // Check if driver already has an active trip
+            var activeTrip = await _context.Trips
+                .FirstOrDefaultAsync(t => t.DriverId == dto.DriverId && 
+                                          (t.Status == "Ongoing" || t.WaktuSelesai == null));
+            if (activeTrip != null)
+            {
+                throw new InvalidOperationException("Driver already has an active trip.");
+            }
+
             var vehicle = await _context.Vehicles
                 .FirstOrDefaultAsync(v => v.VehicleId == dto.VehicleId);
 
@@ -37,9 +46,9 @@ namespace fleetops_backend.Application.Services
             }
 
             Point? startPoint = null;
-            if (dto.StartLatitude.HasValue && dto.StartLongitude.HasValue)
+            if (dto.KordAwalLatitude.HasValue && dto.KordAwalLongitude.HasValue)
             {
-                startPoint = new Point(dto.StartLongitude.Value, dto.StartLatitude.Value)
+                startPoint = new Point(dto.KordAwalLongitude.Value, dto.KordAwalLatitude.Value)
                 {
                     SRID = 4326
                 };
@@ -51,11 +60,24 @@ namespace fleetops_backend.Application.Services
                 VehicleId = dto.VehicleId,
                 LokasiAwal = dto.LokasiAwal,
                 KordAwal = startPoint,
+                OdometerAwal = dto.OdometerAwal,
                 WaktuMulai = DateTimeOffset.UtcNow,
                 Status = "Ongoing"
             };
 
             _context.Trips.Add(trip);
+            await _context.SaveChangesAsync();
+
+            // Create TripDetail
+            var tripDetail = new TripDetail
+            {
+                TripId = trip.TripId,
+                Jarak = 0,
+                AvgSpeed = 0,
+                Waktu = 0
+            };
+
+            _context.Add(tripDetail);
             await _context.SaveChangesAsync();
 
             return trip;
@@ -84,10 +106,15 @@ namespace fleetops_backend.Application.Services
                 throw new InvalidOperationException("Trip already finished.");
             }
 
-            Point? endPoint = null;
-            if (dto.EndLatitude.HasValue && dto.EndLongitude.HasValue)
+            if (dto.OdometerAkhir.HasValue && trip.OdometerAwal.HasValue && dto.OdometerAkhir < trip.OdometerAwal)
             {
-                endPoint = new Point(dto.EndLongitude.Value, dto.EndLatitude.Value)
+                throw new InvalidOperationException("Odometer akhir cannot be lower than odometer awal.");
+            }
+
+            Point? endPoint = null;
+            if (dto.KordAkhirLatitude.HasValue && dto.KordAkhirLongitude.HasValue)
+            {
+                endPoint = new Point(dto.KordAkhirLongitude.Value, dto.KordAkhirLatitude.Value)
                 {
                     SRID = 4326
                 };
@@ -95,11 +122,40 @@ namespace fleetops_backend.Application.Services
 
             trip.KordAkhir = endPoint;
             trip.LokasiAkhir = dto.LokasiAkhir;
+            trip.OdometerAkhir = dto.OdometerAkhir;
             trip.WaktuSelesai = DateTimeOffset.UtcNow;
             trip.Status = "Finished";
 
             _context.Trips.Update(trip);
             await _context.SaveChangesAsync();
+
+            // Update TripDetail with calculated metrics
+            var tripDetail = await _context.Set<TripDetail>()
+                .FirstOrDefaultAsync(td => td.TripId == tripId);
+
+            if (tripDetail != null)
+            {
+                // Calculate distance traveled from odometer readings
+                if (trip.OdometerAwal.HasValue && trip.OdometerAkhir.HasValue)
+                {
+                    tripDetail.Jarak = (int)(trip.OdometerAkhir.Value - trip.OdometerAwal.Value);
+                    trip.JarakTempuh = trip.OdometerAkhir.Value - trip.OdometerAwal.Value;
+                    _context.Trips.Update(trip);
+                }
+
+                // Calculate trip duration in seconds
+                var duration = trip.WaktuSelesai.Value - trip.WaktuMulai;
+                tripDetail.Waktu = (int)duration.TotalSeconds;
+
+                // Calculate average speed (distance / time in hours)
+                if (tripDetail.Jarak > 0 && duration.TotalSeconds > 0)
+                {
+                    tripDetail.AvgSpeed = (int)(tripDetail.Jarak / (duration.TotalSeconds / 3600));
+                }
+
+                _context.Update(tripDetail);
+                await _context.SaveChangesAsync();
+            }
 
             return trip;
         }

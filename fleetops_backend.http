@@ -1,5 +1,6 @@
 @fleetops_backend_HostAddress = http://localhost:5107
 @existingDriverId = 1
+@existingVehicleId = 1
 @nonExistingVehicleId = 999999
 @existingTripId = 1
 @nonExistingTripId = 999999
@@ -27,16 +28,17 @@ Content-Type: application/json
 GET {{fleetops_backend_HostAddress}}/api/auth/users
 Content-Type: application/json
 
-### Start Trip
+### Start Trip - Successful
 POST {{fleetops_backend_HostAddress}}/api/trips/start
 Content-Type: application/json
 
 {
   "driverId": {{existingDriverId}},
-  "vehicleId": 1,
+  "vehicleId": {{existingVehicleId}},
   "lokasiAwal": "Jakarta",
-  "startLatitude": -6.2088,
-  "startLongitude": 106.8456
+  "kordAwalLatitude": -6.2088,
+  "kordAwalLongitude": 106.8456,
+  "odometerAwal": 1000.5
 }
 
 ### Start Trip - Vehicle Does Not Exist
@@ -47,20 +49,35 @@ Content-Type: application/json
   "driverId": {{existingDriverId}},
   "vehicleId": {{nonExistingVehicleId}},
   "lokasiAwal": "Jakarta",
-  "startLatitude": -6.2088,
-  "startLongitude": 106.8456
+  "kordAwalLatitude": -6.2088,
+  "kordAwalLongitude": 106.8456,
+  "odometerAwal": 1000.5
 }
 
-### Stop Trip
+### Start Trip - Driver Already Has Active Trip
+POST {{fleetops_backend_HostAddress}}/api/trips/start
+Content-Type: application/json
+
+{
+  "driverId": {{existingDriverId}},
+  "vehicleId": {{existingVehicleId}},
+  "lokasiAwal": "Jakarta",
+  "kordAwalLatitude": -6.2088,
+  "kordAwalLongitude": 106.8456,
+  "odometerAwal": 1100.5
+}
+
+### Stop Trip - Successful
 PATCH {{fleetops_backend_HostAddress}}/api/trips/{{existingTripId}}/stop
 Content-Type: application/json
 
 {
   "driverId": {{existingDriverId}},
-  "vehicleId": 1,
+  "vehicleId": {{existingVehicleId}},
   "lokasiAkhir": "Bandung",
-  "endLatitude": -6.9147,
-  "endLongitude": 107.6098
+  "kordAkhirLatitude": -6.9147,
+  "kordAkhirLongitude": 107.6098,
+  "odometerAkhir": 1050.8
 }
 
 ### Stop Trip - Trip Not Found
@@ -69,8 +86,48 @@ Content-Type: application/json
 
 {
   "driverId": {{existingDriverId}},
-  "vehicleId": 1,
+  "vehicleId": {{existingVehicleId}},
   "lokasiAkhir": "Bandung",
-  "endLatitude": -6.9147,
-  "endLongitude": 107.6098
+  "kordAkhirLatitude": -6.9147,
+  "kordAkhirLongitude": 107.6098,
+  "odometerAkhir": 1050.8
+}
+
+### Stop Trip - Driver Does Not Match
+PATCH {{fleetops_backend_HostAddress}}/api/trips/{{existingTripId}}/stop
+Content-Type: application/json
+
+{
+  "driverId": 999,
+  "vehicleId": {{existingVehicleId}},
+  "lokasiAkhir": "Bandung",
+  "kordAkhirLatitude": -6.9147,
+  "kordAkhirLongitude": 107.6098,
+  "odometerAkhir": 1050.8
+}
+
+### Stop Trip - Vehicle Does Not Match
+PATCH {{fleetops_backend_HostAddress}}/api/trips/{{existingTripId}}/stop
+Content-Type: application/json
+
+{
+  "driverId": {{existingDriverId}},
+  "vehicleId": 999,
+  "lokasiAkhir": "Bandung",
+  "kordAkhirLatitude": -6.9147,
+  "kordAkhirLongitude": 107.6098,
+  "odometerAkhir": 1050.8
+}
+
+### Stop Trip - Odometer Akhir Lower Than Awal
+PATCH {{fleetops_backend_HostAddress}}/api/trips/{{existingTripId}}/stop
+Content-Type: application/json
+
+{
+  "driverId": {{existingDriverId}},
+  "vehicleId": {{existingVehicleId}},
+  "lokasiAkhir": "Bandung",
+  "kordAkhirLatitude": -6.9147,
+  "kordAkhirLongitude": 107.6098,
+  "odometerAkhir": 950.5
 }

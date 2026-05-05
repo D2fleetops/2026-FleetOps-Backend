@@ -23,6 +23,15 @@ namespace fleetops_backend.Models
         public string? LokasiAwal {get; set;}
         public string? LokasiAkhir {get; set;}
 
+        [Column("odometer_awal")]
+        public double? OdometerAwal { get; set; }
+
+        [Column("odometer_akhir")]
+        public double? OdometerAkhir { get; set; }
+
+        [Column("jarak_tempuh")]
+        public double? JarakTempuh { get; set; }
+
         [Column("waktu_mulai")]
         public DateTimeOffset WaktuMulai { get; set; }
 
